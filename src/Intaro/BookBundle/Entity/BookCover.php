@@ -76,6 +76,7 @@ class BookCover
      * Set alias
      *
      * @param string $alias
+     * 
      * @return BookCover
      */
     public function setAlias($alias)
@@ -99,6 +100,7 @@ class BookCover
      * Set fileExt
      *
      * @param string $fileExt
+     * 
      * @return BookCover
      */
     public function setFileExt($fileExt)
@@ -122,6 +124,7 @@ class BookCover
      * Set dateAded
      *
      * @param \DateTime $dateAded
+     * 
      * @return BookCover
      */
     public function setDateAded(\DateTime $dateAded)

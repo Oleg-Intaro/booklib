@@ -81,6 +81,7 @@ class Book
      * Set title
      *
      * @param string $title
+     * 
      * @return Book
      */
     public function setTitle($title)
@@ -104,6 +105,7 @@ class Book
      * Set author
      *
      * @param string $author
+     * 
      * @return Book
      */
     public function setAuthor($author)
@@ -127,6 +129,7 @@ class Book
      * Set lastRead
      *
      * @param \DateTime $lastRead
+     * 
      * @return Book
      */
     public function setLastRead(\DateTime $lastRead)
@@ -150,6 +153,7 @@ class Book
      * Set allowDownload
      *
      * @param boolean $allowDownload
+     * 
      * @return Book
      */
     public function setAllowDownload($allowDownload)
@@ -173,6 +177,7 @@ class Book
      * Set cover
      *
      * @param \Intaro\BookBundle\Entity\BookCover $cover
+     * 
      * @return Book
      */
     public function setCover(\Intaro\BookBundle\Entity\BookCover $cover = null)
@@ -196,6 +201,7 @@ class Book
      * Set file
      *
      * @param \Intaro\BookBundle\Entity\BookFile $file
+     * 
      * @return Book
      */
     public function setFile(\Intaro\BookBundle\Entity\BookFile $file = null)
