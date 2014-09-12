@@ -1,0 +1,4 @@
+intaro_book:
+    resource: "@IntaroBookBundle/Resources/config/routing.yml"
+    prefix:   /
+
