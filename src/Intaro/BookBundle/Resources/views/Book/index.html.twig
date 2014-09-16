@@ -18,7 +18,7 @@
                 <br />
                 <p>
                     {% if entity.allowDownload %}
-                           <a href="{{ entity.path }}">Скачать</a>
+                           <a href="{{ path('book_download', { 'id': entity.id }) }}">Скачать</a>
                     {% endif %}
                     <a href="{{ path('book_edit', { 'id': entity.id }) }}">Редактировать</a>
                 </p>

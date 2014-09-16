@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Intaro\BookBundle\Entity\Book;
 use Intaro\BookBundle\Form\BookType;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Book controller.
@@ -122,7 +124,7 @@ class BookController extends Controller
         $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Book entity.');
+            throw $this->createNotFoundException('Невозможно найти данную книгу..');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -147,7 +149,7 @@ class BookController extends Controller
         $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Book entity.');
+            throw $this->createNotFoundException('Невозможно найти данную книгу..');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -192,7 +194,7 @@ class BookController extends Controller
         $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Book entity.');
+            throw $this->createNotFoundException('Невозможно найти данную книгу..');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -227,7 +229,7 @@ class BookController extends Controller
             $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Book entity.');
+                throw $this->createNotFoundException('Невозможно найти данную книгу..');
             }
 
             $em->remove($entity);
@@ -252,5 +254,34 @@ class BookController extends Controller
             ->add('submit', 'submit', array('label' => 'Удалить'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Загрузка файла
+     * 
+     * @Route("/download/{id}", name="book_download")
+     * @Method("GET")
+     * 
+     * @return BinaryFileResponse
+     */
+    public function downloadAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Невозможно найти данную книгу.');
+        }
+        $file = $entity->getAbsolutePath();
+        if(!file_exists($file)){
+            throw $this->createNotFoundException('Невозможно найти файл книги.');
+        }
+       
+        $response = new BinaryFileResponse($file);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $entity->getPath()
+        );
+        
+        return $response;
     }
 }
