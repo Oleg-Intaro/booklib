@@ -3,9 +3,10 @@
 namespace Intaro\BookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Book
+ * Книга
  *
  * @ORM\Table(name="book")
  * @ORM\Entity
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Book
 {
     /**
-     * @var integer
+     * @var integer 
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -36,32 +37,42 @@ class Book
     private $author;
 
     /**
-     * @var DateTime
+     * @var DateTime Дата прочтения
      *
-     * @ORM\Column(name="lastRead", type="datetime")
+     * @ORM\Column(name="lastRead", type="datetime", nullable=true)
      */
     private $lastRead;
 
     /**
-     * @var boolean
+     * @var boolean Разрешить скачивание
      *
      * @ORM\Column(name="allowDownload", type="boolean")
      */
     private $allowDownload;
     
     /**
-     * @var string
+     * @var string Путь до файла
      * 
-     * @ORM\Column(name="cover", type="string", length=100)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $cover;
+    private $path;
     
     /**
-     * @var string 
+     * @var string Путь до файла обложки
      * 
-     * @ORM\Column(name="document", type="string", length=100)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $document;
+    private $coverPath;
+    
+    /**
+     * @var UploadedFile Файл книги
+     */
+    private $file;
+    
+    /**
+     * @var UploadedFile Файл обложки
+     */
+    private $coverFile;
 
     /**
      * Get id
@@ -128,7 +139,7 @@ class Book
      * 
      * @return Book
      */
-    public function setLastRead(\DateTime $lastRead)
+    public function setLastRead(\DateTime $lastRead = null)
     {
         $this->lastRead = $lastRead;
 
@@ -167,51 +178,225 @@ class Book
     public function getAllowDownload()
     {
         return $this->allowDownload;
-    }
+    }  
 
     /**
-     * Set cover
+     * Set path
      *
-     * @param string $cover
+     * @param string $path
      * @return Book
      */
-    public function setCover($cover)
+    public function setPath($path)
     {
-        $this->cover = $cover;
+        $this->path = $path;
 
         return $this;
     }
 
     /**
-     * Get cover
+     * Get path
      *
      * @return string 
      */
-    public function getCover()
+    public function getPath()
     {
-        return $this->cover;
+        return $this->path;
+    }
+    
+    /**
+     * Set file
+     * 
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * 
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    public function setFile(UploadedFile $file)
+    {
+        $this->file = $file;
+        
+        return $this->file;
+    }
+    
+    /**
+     * Get file
+     * 
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    public function getFile()
+    {   
+        return $this->file;
+    }
+    
+    /**
+     * Set coverFile
+     * 
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * 
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    public function setCoverFile(UploadedFile $coverFile)
+    {
+        $this->coverFile = $coverFile;
+        
+        return $this->coverFile;
+    }
+    
+    /**
+     * Get coverFile
+     * 
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    public function getCoverFile()
+    {   
+        return $this->coverFile;
     }
 
     /**
-     * Set document
+     * Set coverPath
      *
-     * @param string $document
+     * @param string $coverPath
      * @return Book
      */
-    public function setDocument($document)
+    public function setCoverPath($coverPath)
     {
-        $this->document = $document;
+        $this->coverPath = $coverPath;
 
         return $this;
     }
 
     /**
-     * Get document
+     * Get coverPath
      *
      * @return string 
      */
-    public function getDocument()
+    public function getCoverPath()
     {
-        return $this->document;
+        return $this->coverPath;
+    }
+    
+    /**
+     * Возвращает полный путь до директории с файлами книг
+     * 
+     * @return string
+     */
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+    
+    /**
+     * Возвращает полный путь до директории с файлами обложек
+     * 
+     * @return string
+     */
+    public function getAbsoluteCoverPath()
+    {
+        return null === $this->coverPath
+            ? null
+            : $this->getCoverRootDir().'/'.$this->coverPath;
+    }
+    
+    /**
+     * Возвращает относительный путь до директории с файлами книг
+     * 
+     * @return string
+     */
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+    
+    /**
+     * Возвращает относительный путь до директории с файлами обложек
+     * 
+     * @return string
+     */
+    public function getWebCoverPath()
+    {
+        return null === $this->coverPath
+            ? null
+            : $this->getCoverDir().'/'.$this->coverPath;
+    }
+
+    /**
+     * Возвращает абсолютный путь до директории, в которой будут храниться книги
+     * 
+     * @return string
+     */
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+    
+    /**
+     * Возвращает абсолютный путь до директории, в которой будут храниться обложки
+     * 
+     * @return string
+     */
+    protected function getCoverRootDir()
+    {
+        return __DIR__.'/../../../../web/'.$this->getCoverDir();
+    }
+
+    /**
+     * Возвращает директорию, где будут храниться книги
+     * 
+     * @return string
+     */
+    protected function getUploadDir()
+    {
+        return 'uploads/books';
+    }
+    
+    /**
+     * Возвращает директорию, где будут храниться обложки книг
+     * 
+     * @return string
+     */
+    protected function getCoverDir()
+    {
+        return 'uploads/books/covers';
+    }
+    
+    public function upload()
+    {
+        // Файла может и не быть, если он не обязателен
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // ! сгенерировать имя файла
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $this->getFile()->getClientOriginalName()
+        );
+        
+        // ! сохранить сгенерированное имя файла
+        $this->path = $this->getFile()->getClientOriginalName();
+
+        $this->file = null;
+    }
+    
+    public function uploadCover()
+    {
+        // Файла может и не быть, если он не обязателен
+        if (null === $this->getCoverFile()) {
+            return;
+        }
+
+        // ! сгенерировать имя файла
+        $this->getCoverFile()->move(
+            $this->getCoverRootDir(),
+            $this->getCoverFile()->getClientOriginalName()
+        );
+        
+        // ! сохранить сгенерированное имя файла
+        $this->coverPath = $this->getCoverFile()->getClientOriginalName();
+
+        $this->coverFile = null;
     }
 }

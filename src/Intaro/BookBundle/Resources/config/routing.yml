@@ -1,3 +1,4 @@
-intaro_book_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: IntaroBookBundle:Default:index }
+intaro_book:
+    resource: "@IntaroBookBundle/Controller/"
+    type: annotation
+    prefix: /
