@@ -46,6 +46,22 @@
             <tr>
                 <td colspan="2"> {{ form_errors(form.coverFile) }}</td>
             </tr>
+            
+            <tr>
+                <td> {{ form_label(form.lastRead, 'Дата прочтения') }}</td>
+                <td> {{ form_widget(form.lastRead) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"> {{ form_errors(form.lastRead) }}</td>
+            </tr>
+            
+            <tr>
+                <td> {{ form_label(form.allowDownload, 'Разрешить скачивание') }}</td>
+                <td> {{ form_widget(form.allowDownload) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"> {{ form_errors(form.allowDownload) }}</td>
+            </tr>
         </table>
         {{ form_end(form) }}
         <ul class="record_actions">

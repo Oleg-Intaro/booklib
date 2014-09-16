@@ -79,8 +79,10 @@ class BookController extends Controller
         $form = $this->createForm(new BookType(), $entity, array(
             'action' => $this->generateUrl('book_create'),
             'method' => 'POST',
+            'validation_groups' => array('Book', 'create'),
         ));
-
+        $form->add('file');
+        $form->add('coverFile');
         $form->add('submit', 'submit', array('label' => 'Добавить'));
 
         return $form;
@@ -96,6 +98,7 @@ class BookController extends Controller
     public function newAction()
     {
         $entity = new Book();
+        $entity->setLastRead(new \DateTime());
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -106,6 +109,7 @@ class BookController extends Controller
 
     /**
      * Finds and displays a Book entity.
+     * !!! удалить
      *
      * @Route("/{id}", name="book_show")
      * @Method("GET")

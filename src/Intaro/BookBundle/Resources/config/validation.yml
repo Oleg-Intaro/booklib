@@ -19,6 +19,7 @@ Intaro\BookBundle\Entity\Book:
         file:
             - NotBlank:
                 message: "Пожалуйста укажите файл с книгой"
+                groups: [create]
             - File:
                 maxSize: 5M
 #                mimeTypes: [application/pdf, application/x-pdf]
@@ -28,5 +29,10 @@ Intaro\BookBundle\Entity\Book:
             - Image:
                 mimeTypes: [image/png, image/jpeg]
                 mimeTypesMessage: "Разрешены только изображения форматов jpeg, png"
-                
+        lastRead:
+            - NotBlank:
+                message: "Пожалуйста укажите дату прочтения"
+            - Type:
+                type: \DateTime
+                message: "Неверный формат даты"
             

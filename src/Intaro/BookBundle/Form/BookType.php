@@ -17,10 +17,10 @@ class BookType extends AbstractType
         $builder
             ->add('title')
             ->add('author')
-//            ->add('lastRead')
-//            ->add('allowDownload')
-            ->add('file')
-            ->add('coverFile')
+            //->add('file')
+            //->add('coverFile')
+            ->add('lastRead')
+            ->add('allowDownload')
         ;
     }
     
