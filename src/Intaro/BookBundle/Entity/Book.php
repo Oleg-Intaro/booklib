@@ -49,26 +49,26 @@ class Book
      * @ORM\Column(name="allowDownload", type="boolean")
      */
     private $allowDownload;
-    
+
     /**
      * @var string Путь до файла
      * 
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $path;
-    
+
     /**
      * @var string Путь до файла обложки
      * 
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $coverPath;
-    
+
     /**
      * @var UploadedFile Файл книги
      */
     private $file;
-    
+
     /**
      * @var UploadedFile Файл обложки
      */
@@ -178,12 +178,13 @@ class Book
     public function getAllowDownload()
     {
         return $this->allowDownload;
-    }  
+    }
 
     /**
      * Set path
      *
      * @param string $path
+     * 
      * @return Book
      */
     public function setPath($path)
@@ -202,7 +203,7 @@ class Book
     {
         return $this->path;
     }
-    
+
     /**
      * Set file
      * 
@@ -213,41 +214,41 @@ class Book
     public function setFile(UploadedFile $file)
     {
         $this->file = $file;
-        
+
         return $this->file;
     }
-    
+
     /**
      * Get file
      * 
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function getFile()
-    {   
+    {
         return $this->file;
     }
-    
+
     /**
      * Set coverFile
      * 
-     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param UploadedFile $coverFile
      * 
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     * @return UploadedFile
      */
     public function setCoverFile(UploadedFile $coverFile)
     {
         $this->coverFile = $coverFile;
-        
+
         return $this->coverFile;
     }
-    
+
     /**
      * Get coverFile
      * 
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function getCoverFile()
-    {   
+    {
         return $this->coverFile;
     }
 
@@ -255,6 +256,7 @@ class Book
      * Set coverPath
      *
      * @param string $coverPath
+     * 
      * @return Book
      */
     public function setCoverPath($coverPath)
@@ -273,7 +275,7 @@ class Book
     {
         return $this->coverPath;
     }
-    
+
     /**
      * Возвращает полный путь до директории с файлами книг
      * 
@@ -285,7 +287,7 @@ class Book
             ? null
             : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     /**
      * Возвращает полный путь до директории с файлами обложек
      * 
@@ -297,7 +299,7 @@ class Book
             ? null
             : $this->getCoverRootDir().'/'.$this->coverPath;
     }
-    
+
     /**
      * Возвращает относительный путь до директории с файлами книг
      * 
@@ -309,7 +311,7 @@ class Book
             ? null
             : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     /**
      * Возвращает относительный путь до директории с файлами обложек
      * 
@@ -331,7 +333,7 @@ class Book
     {
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
-    
+
     /**
      * Возвращает абсолютный путь до директории, в которой будут храниться обложки
      * 
@@ -351,7 +353,7 @@ class Book
     {
         return 'uploads/books';
     }
-    
+
     /**
      * Возвращает директорию, где будут храниться обложки книг
      * 
@@ -361,26 +363,30 @@ class Book
     {
         return 'uploads/books/covers';
     }
-    
+
+    /**
+     * Загружает файл книги на сервер
+     */
     public function upload()
     {
         // Файла может и не быть, если он не обязателен
         if (null === $this->getFile()) {
             return;
         }
-
         // ! сгенерировать имя файла
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $this->getFile()->getClientOriginalName()
         );
-        
         // ! сохранить сгенерированное имя файла
         $this->path = $this->getFile()->getClientOriginalName();
 
         $this->file = null;
     }
-    
+
+    /**
+     * Загружает обложку книги на серер
+     */
     public function uploadCover()
     {
         // Файла может и не быть, если он не обязателен
@@ -393,7 +399,6 @@ class Book
             $this->getCoverRootDir(),
             $this->getCoverFile()->getClientOriginalName()
         );
-        
         // ! сохранить сгенерированное имя файла
         $this->coverPath = $this->getCoverFile()->getClientOriginalName();
 

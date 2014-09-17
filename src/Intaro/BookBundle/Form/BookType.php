@@ -6,24 +6,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Форма книги
+ */
 class BookType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title')
             ->add('author')
-            //->add('file')
-            //->add('coverFile')
             ->add('lastRead')
-            ->add('allowDownload')
-        ;
+            ->add('allowDownload');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

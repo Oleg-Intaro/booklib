@@ -6,6 +6,8 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Пользователь
+ * 
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
  */
@@ -18,6 +20,9 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * User Construct
+     */
     public function __construct()
     {
         parent::__construct();

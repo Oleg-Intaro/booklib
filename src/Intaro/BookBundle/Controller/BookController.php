@@ -2,14 +2,15 @@
 
 namespace Intaro\BookBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Intaro\BookBundle\Entity\Book;
 use Intaro\BookBundle\Form\BookType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
@@ -39,6 +40,8 @@ class BookController extends Controller
     }
     /**
      * Creates a new Book entity.
+     * 
+     * @param Request $request
      *
      * @Route("/", name="book_create")
      * @Method("POST")
@@ -96,6 +99,7 @@ class BookController extends Controller
      * @Route("/new", name="book_new")
      * @Method("GET")
      * @Template()
+     * @Security("has_role('ROLE_USER')")
      */
     public function newAction()
     {
@@ -111,11 +115,13 @@ class BookController extends Controller
 
     /**
      * Finds and displays a Book entity.
-     * !!! удалить
+     * 
+     * @param int $id
      *
      * @Route("/{id}", name="book_show")
      * @Method("GET")
      * @Template()
+     * @Security("has_role('ROLE_USER')")
      */
     public function showAction($id)
     {
@@ -137,10 +143,13 @@ class BookController extends Controller
 
     /**
      * Displays a form to edit an existing Book entity.
+     * 
+     * @param int $id
      *
      * @Route("/{id}/edit", name="book_edit")
      * @Method("GET")
      * @Template()
+     * @Security("has_role('ROLE_USER')")
      */
     public function editAction($id)
     {
@@ -183,6 +192,9 @@ class BookController extends Controller
     /**
      * Edits an existing Book entity.
      *
+     * @param Request $request
+     * @param int     $id
+     * 
      * @Route("/{id}", name="book_update")
      * @Method("PUT")
      * @Template("IntaroBookBundle:Book:edit.html.twig")
@@ -216,6 +228,9 @@ class BookController extends Controller
     /**
      * Deletes a Book entity.
      *
+     * @param Request $request
+     * @param int     $id
+     * 
      * @Route("/{id}", name="book_delete")
      * @Method("DELETE")
      */
@@ -252,12 +267,13 @@ class BookController extends Controller
             ->setAction($this->generateUrl('book_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Удалить'))
-            ->getForm()
-        ;
+            ->getForm();
     }
-    
+
     /**
      * Загрузка файла
+     * 
+     * @param int $id
      * 
      * @Route("/download/{id}", name="book_download")
      * @Method("GET")
@@ -272,16 +288,15 @@ class BookController extends Controller
             throw $this->createNotFoundException('Невозможно найти данную книгу.');
         }
         $file = $entity->getAbsolutePath();
-        if(!file_exists($file)){
+        if (!file_exists($file)) {
             throw $this->createNotFoundException('Невозможно найти файл книги.');
         }
-       
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $entity->getPath()
         );
-        
+
         return $response;
     }
 }
