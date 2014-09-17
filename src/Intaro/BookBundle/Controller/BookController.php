@@ -294,7 +294,7 @@ class BookController extends Controller
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $entity->getPath()
+            $entity->getDownloadFileName()
         );
 
         return $response;

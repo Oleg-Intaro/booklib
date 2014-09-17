@@ -365,6 +365,28 @@ class Book
     }
 
     /**
+     * Перемещает файл в директорию соответствующую дате добавления,
+     * генерируя уникальное имя файла
+     * 
+     * @param UploadedFile $file
+     * @param type         $rootDir
+     * 
+     * @return string новое имя файла, содержащие дату
+     */
+    private function moveFile(UploadedFile $file, $rootDir)
+    {
+        $date = date('Y/m/d');
+        $filename = $this->generateFileName();
+        $ext = $file->guessExtension();
+        $file->move(
+            $rootDir . '/' . $date,
+            $filename.'.'.$ext
+        );
+
+        return $date.'/'.$filename.'.'.$ext;
+    }
+
+    /**
      * Загружает файл книги на сервер
      */
     public function upload()
@@ -373,14 +395,10 @@ class Book
         if (null === $this->getFile()) {
             return;
         }
-        // ! сгенерировать имя файла
-        $this->getFile()->move(
-            $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+        $this->path = $this->moveFile(
+            $this->getFile(),
+            $this->getUploadRootDir()
         );
-        // ! сохранить сгенерированное имя файла
-        $this->path = $this->getFile()->getClientOriginalName();
-
         $this->file = null;
     }
 
@@ -393,15 +411,31 @@ class Book
         if (null === $this->getCoverFile()) {
             return;
         }
-
-        // ! сгенерировать имя файла
-        $this->getCoverFile()->move(
-            $this->getCoverRootDir(),
-            $this->getCoverFile()->getClientOriginalName()
+        $this->coverPath = $this->moveFile(
+            $this->getCoverFile(),
+            $this->getCoverRootDir()
         );
-        // ! сохранить сгенерированное имя файла
-        $this->coverPath = $this->getCoverFile()->getClientOriginalName();
 
         $this->coverFile = null;
+    }
+
+    /**
+     * Удаляет составляющую даты из имени файла
+     * 
+     * @return string
+     */
+    public function getDownloadFileName()
+    {
+        return substr($this->path, 11);
+    }
+
+    /**
+     * Генерирует уникальное имя файла
+     * 
+     * @return string sha1
+     */
+    public function generateFileName()
+    {
+        return sha1(uniqid(mt_rand(), true));
     }
 }

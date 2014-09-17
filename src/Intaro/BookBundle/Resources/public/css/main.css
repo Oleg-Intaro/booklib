@@ -56,3 +56,7 @@ ul.record_actions{
     height: 100px;
     margin: 20px;
 }
+
+.record_properties{
+    text-align: left;
+}
