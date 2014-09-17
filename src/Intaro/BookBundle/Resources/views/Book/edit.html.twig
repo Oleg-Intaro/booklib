@@ -50,9 +50,9 @@
         {{ form_end(edit_form) }}
         <div class="cover">
                 {% if entity.WebCoverPath %}
-                    <img src="{{ asset(entity.WebCoverPath) }}" width="100" height="100" />
+                    {{ asset(entity.WebCoverPath)|img(70, 70) }}
                 {% else %}
-                    <img src="{{ asset('bundles/intarobook/img/default_cover.png') }}" width="100" height="100" />
+                    {{ asset('bundles/intarobook/img/default_cover.png')|img(70, 70) }}
                 {% endif %}
         </div><!--.cover-->
         <ul class="record_actions">

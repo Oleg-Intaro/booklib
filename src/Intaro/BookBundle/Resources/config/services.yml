@@ -6,3 +6,8 @@ services:
         class: Intaro\BookBundle\Subscriber\BookFileRemover
         tags:
             - { name: doctrine.event_listener, event: postRemove }
+    
+    intaro.twig.img_extension:
+        class: Intaro\BookBundle\Twig\ImageResizerExtention
+        tags:
+            - { name: twig.extension }

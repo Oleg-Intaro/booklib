@@ -18,9 +18,9 @@
             <div class="entity">
                 <div class="entity_cover">
                     {% if entity.WebCoverPath %}
-                        <img src="{{ asset(entity.WebCoverPath) }}" width="100" height="100" />
+                          {{ asset(entity.WebCoverPath)|img }}
                     {% else %}
-                        <img src="{{ asset('bundles/intarobook/img/default_cover.png') }}" width="100" height="100" />
+                          {{ asset('bundles/intarobook/img/default_cover.png')|img }}
                     {% endif %}
                 </div><!--.entity_cover-->
                 <div class="entity_content">
