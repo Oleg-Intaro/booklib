@@ -54,13 +54,11 @@ class BookController extends Controller
         $entity = new Book();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            // загружаем файл книги
+            $em->persist($entity);
             $entity->upload();
             $entity->uploadCover();
-            $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('book_show', array('id' => $entity->getId())));
@@ -294,7 +292,9 @@ class BookController extends Controller
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $entity->getDownloadFileName()
+            // если здесь использовть название книги на русском, 
+            // то вылетает ошибка, что имя файла может содержать только ASCII
+            $entity->getPath()
         );
 
         return $response;

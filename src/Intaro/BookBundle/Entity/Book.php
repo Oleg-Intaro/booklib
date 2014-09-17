@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="book")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Book
 {
@@ -39,28 +40,28 @@ class Book
     /**
      * @var DateTime Дата прочтения
      *
-     * @ORM\Column(name="lastRead", type="datetime", nullable=true)
+     * @ORM\Column(name="last_read", type="datetime", nullable=true)
      */
     private $lastRead;
 
     /**
      * @var boolean Разрешить скачивание
      *
-     * @ORM\Column(name="allowDownload", type="boolean")
+     * @ORM\Column(name="allow_download", type="boolean")
      */
     private $allowDownload;
 
     /**
      * @var string Путь до файла
      * 
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
      */
     private $path;
 
     /**
      * @var string Путь до файла обложки
      * 
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(name="cover_path", type="string", length=255, nullable=true)
      */
     private $coverPath;
 
@@ -73,6 +74,13 @@ class Book
      * @var UploadedFile Файл обложки
      */
     private $coverFile;
+
+    /**
+     * @var string Директория с файлом
+     * 
+     * @ORM\Column(name="additional_dir", type="string", length=10)
+     */
+    private $additionalDir;
 
     /**
      * Get id
@@ -277,6 +285,30 @@ class Book
     }
 
     /**
+     * Set Additionaldir
+     * 
+     * @param string $additionalDir
+     * 
+     * @return string
+     */
+    public function setAdditionalDir($additionalDir)
+    {
+        $this->additionalDir = $additionalDir;
+
+        return $this->additionalDir;
+    }
+
+    /**
+     * Get Additionaldir
+     * 
+     * @return string
+     */
+    public function getAdditionalDir()
+    {
+        return $this->additionalDir;
+    }
+
+    /**
      * Возвращает полный путь до директории с файлами книг
      * 
      * @return string
@@ -351,7 +383,7 @@ class Book
      */
     protected function getUploadDir()
     {
-        return 'uploads/books';
+        return 'uploads/books/'.$this->getAdditionalDir();
     }
 
     /**
@@ -361,7 +393,7 @@ class Book
      */
     protected function getCoverDir()
     {
-        return 'uploads/books/covers';
+        return 'uploads/books/'.$this->getAdditionalDir().'/covers';
     }
 
     /**
@@ -375,15 +407,17 @@ class Book
      */
     private function moveFile(UploadedFile $file, $rootDir)
     {
-        $date = date('Y/m/d');
         $filename = $this->generateFileName();
         $ext = $file->guessExtension();
+        if (null === $ext) {
+            $ext = 'bin';
+        }
         $file->move(
-            $rootDir . '/' . $date,
+            $rootDir,
             $filename.'.'.$ext
         );
 
-        return $date.'/'.$filename.'.'.$ext;
+        return $filename.'.'.$ext;
     }
 
     /**
@@ -420,16 +454,6 @@ class Book
     }
 
     /**
-     * Удаляет составляющую даты из имени файла
-     * 
-     * @return string
-     */
-    public function getDownloadFileName()
-    {
-        return substr($this->path, 11);
-    }
-
-    /**
      * Генерирует уникальное имя файла
      * 
      * @return string sha1
@@ -437,5 +461,15 @@ class Book
     public function generateFileName()
     {
         return sha1(uniqid(mt_rand(), true));
+    }
+
+    /**
+     * Устанавливает директорию с фалом перед сохранением
+     * 
+     * @ORM\PrePersist()
+     */
+    public function setDirValue()
+    {
+        $this->additionalDir = date('Y/m/d');
     }
 }
