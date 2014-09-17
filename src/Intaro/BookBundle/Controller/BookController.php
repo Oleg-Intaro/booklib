@@ -31,8 +31,10 @@ class BookController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('IntaroBookBundle:Book')->findAll();
+        $entities = $em->getRepository('IntaroBookBundle:Book')->findBy(
+            array(),
+            array('lastRead' => 'DESC')
+        );
 
         return array(
             'entities' => $entities,
@@ -50,8 +52,6 @@ class BookController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Book();
-        // temporary
-        $entity->setAllowDownload(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
