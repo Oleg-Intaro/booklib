@@ -11,3 +11,13 @@ services:
         class: Intaro\BookBundle\Twig\ImageResizerExtention
         tags:
             - { name: twig.extension }
+    
+    memcache:
+        class: Memcache
+        calls:
+            - [ connect, ['localhost', 11211] ]
+            
+    memcache_driver:
+        class: Doctrine\Common\Cache\MemcacheCache
+        calls:
+            - [ setMemcache, [@memcache] ]

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Книга
  *
  * @ORM\Table(name="book")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Intaro\BookBundle\Entity\BookRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Book
