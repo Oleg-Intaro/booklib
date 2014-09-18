@@ -14,10 +14,9 @@ class BookRepository extends EntityRepository
      * 
      * @return type
      */
-    public function findAllOrderedByDateCached()
+    public function findAllOrderedByDateCached($cacheDriver)
     {
         $em = $this->getEntityManager();
-        $cacheDriver = $this->get('memcache_driver');
         $query = $em->createQuery('SELECT b FROM IntaroBookBundle:Book b ORDER BY b.lastRead DESC');
         $query->setResultCacheDriver($cacheDriver);
         if (!$cacheDriver->contains('book_entities')) {

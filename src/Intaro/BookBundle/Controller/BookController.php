@@ -31,8 +31,9 @@ class BookController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $cacheDriver = $this->get('memcache_driver');
         $entities = $em->getRepository('IntaroBookBundle:Book')
-            ->findAllOrderedByDateCached();
+            ->findAllOrderedByDateCached($cacheDriver);
 
         return array(
             'entities' => $entities,
