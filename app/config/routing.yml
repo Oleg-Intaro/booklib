@@ -1,3 +1,8 @@
+intaro_api:
+    type: rest
+    resource: Intaro\ApiBundle\Controller\BookController
+    prefix:   /api/v1/
+
 intaro_book:
     resource: "@IntaroBookBundle/Resources/config/routing.yml"
     prefix:   /

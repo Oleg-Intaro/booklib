@@ -4,6 +4,7 @@ namespace Intaro\BookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Книга
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="book")
  * @ORM\Entity(repositoryClass="Intaro\BookBundle\Entity\BookRepository")
  * @ORM\HasLifecycleCallbacks
+ * @Serializer\ExclusionPolicy("all")
  */
 class Book
 {
@@ -20,6 +22,8 @@ class Book
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose
+     * @Serializer\Type("integer")
      */
     private $id;
 
@@ -27,6 +31,8 @@ class Book
      * @var string Название книги
      *
      * @ORM\Column(name="title", type="string", length=100)
+     * @Serializer\Expose
+     * @Serializer\Type("string")
      */
     private $title;
 
@@ -34,6 +40,8 @@ class Book
      * @var string Автор книги
      *
      * @ORM\Column(name="author", type="string", length=100)
+     * @Serializer\Expose
+     * @Serializer\Type("string")
      */
     private $author;
 
@@ -41,6 +49,8 @@ class Book
      * @var DateTime Дата прочтения
      *
      * @ORM\Column(name="last_read", type="datetime", nullable=true)
+     * Serializer\Expose
+     * Serializer\Type("DateTime")
      */
     private $lastRead;
 
@@ -48,6 +58,8 @@ class Book
      * @var boolean Разрешить скачивание
      *
      * @ORM\Column(name="allow_download", type="boolean")
+     * Serializer\Expose
+     * Serializer\Type("boolean")
      */
     private $allowDownload;
 
@@ -55,6 +67,8 @@ class Book
      * @var string Путь до файла
      * 
      * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     * Serializer\Expose
+     * Serializer\Type("string")
      */
     private $path;
 
@@ -62,6 +76,8 @@ class Book
      * @var string Путь до файла обложки
      * 
      * @ORM\Column(name="cover_path", type="string", length=255, nullable=true)
+     * Serializer\Expose
+     * Serializer\Type("integer")
      */
     private $coverPath;
 

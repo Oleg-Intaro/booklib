@@ -75,9 +75,21 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
     
-# FOSUser Configuration
+# FOS User Configuration
 fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Intaro\BookBundle\Entity\User
+    
+# FOS REST Configuration
+fos_rest:
+    routing_loader:
+        default_format: json
+        include_format: false
+    
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: 'force'
 
