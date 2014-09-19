@@ -1,0 +1,17 @@
+intaro_api_book_get_single:
+    path: /books/{id}
+    defaults: { _controller: "IntaroApiBundle:getSingle" }
+    methods: [GET]
+    
+intaro_api_book_get_all:
+    path: /books
+    defaults: { _controller: "IntaroApiBundle:getAll" }
+    methods: [GET]
+    
+intaro_api_book_add:
+    path: /books/add
+    defaults: { _controller: "IntaroApiBundle:add" }
+    
+intaro_api_book_edit:
+    path: /books/{id}/edit
+    defaults: { _controller: "IntaroApiBundle:edit" }

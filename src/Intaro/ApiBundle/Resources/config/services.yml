@@ -1,0 +1,8 @@
+#parameters:
+#     intaro_api.book.handler.class: Intaro\ApiBundle\Handler\BookHandler
+#     intaro_api.book.class: Intaro\BookBundle\Entity\Book
+#
+#services:
+#      intaro_api.book.handler:
+#          class: %intaro_api.book.handler.class%
+#          arguments: [@doctrine.orm.entity_manager, %intaro_api.book.class%]

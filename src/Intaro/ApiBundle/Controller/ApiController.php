@@ -2,12 +2,12 @@
 
 namespace Intaro\ApiBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\Serializer\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\FOSRestController;
 
-class ApiController extends Controller
+class ApiController extends FOSRestController
 {
     protected function getEntityManager()
     {

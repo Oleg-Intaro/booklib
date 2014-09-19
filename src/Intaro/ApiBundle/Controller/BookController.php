@@ -2,43 +2,96 @@
 
 namespace Intaro\ApiBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations as Routing;
+use JMS\Serializer\SerializerBuilder;
+use Intaro\BookBundle\Entity\Book;
+use FOS\RestBundle\View\View;
 
-class BookController extends FOSRestController
+class BookController extends ApiController
 {
-    /**
-     * @Routing\Route("/books")
-     * @Routing\Get
-     */
-    public function getBooksAction($id)
+    
+    public function getAllAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
 
         $entities = $em->getRepository('IntaroBookBundle:Book')->findAll();
         
         if (!$entities) {
-            // 404
+             throw new NotFoundHttpException('No books');
         }
         
-        $view = $this->view($entities, 200);
+        $serializer = SerializerBuilder::create()->build();
         
-//        $view = View::create();
-//
-//        ...
-//
-//        $view->setData($data);
-//        return $view;
-        
-        //set temolate, set temlatevars
-        
-        return $this->handleView($view); 
-        
+        return $serializer->serialize($entities, 'json');
     }
     
-    public function redirectAction()
+    
+    public function addAction(Request $request)
     {
-        $view = $this->routeRedirectView('some_route', array(), 301);
-
-        return $this->handleView($view);
+        $entity = $this->deserialize(
+            'Intaro\BookBundle\Entity\Book',
+             $request
+        );
+        
+        if ($entity instanceof Book === false) {
+            return View::create(array('errors' => $entity), 400);
+        }
+        
+        $em = $this->getEntityManager();
+        $em->persist($entity);
+        $em->flush();
+        
+        $url = $this->generateUrl(
+            'intaro_api_book_get_single',
+            array('id' => $entity->getId()),
+            true
+        );
+        
+        $responce = new \FOS\RestBundle\Response();
+        $responce->setStatusCode(201);
+        $responce->headers->set('Location', $url);
+        
+        return $responce;
     }
+    
+    public function editAction(Reuest $request, $id)
+    {
+        /*
+        $em = $this->getEntityManager();
+        $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
+        
+        if (!$entity) {
+             throw new NotFoundHttpException('No book');
+        }
+        
+        $validator = $this->get('validator');
+        
+        $raw = json_decode($request->getContent(), true);
+        // to implement
+        $entity->patch($raw);
+        
+        if (count($errors = $validator->validate($entity))) {
+            return $errors;
+        }
+          
+        $em->flush();
+         * 
+         */
+    }
+    
+    public function getSingleAction($id)
+    {
+        $em = $this->getEntityManager();
+
+        $entity = $em->getRepository('IntaroBookBundle:Book')->find($id);
+        
+        if (!$entity) {
+             throw new NotFoundHttpException('No book');
+        }
+        
+        $serializer = SerializerBuilder::create()->build();
+        
+        return $serializer->serialize($entity, 'json');
+    }
+    
+    
 }

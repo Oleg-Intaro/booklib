@@ -80,7 +80,7 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Intaro\BookBundle\Entity\User
-    
+
 # FOS REST Configuration
 fos_rest:
     routing_loader:
@@ -91,5 +91,11 @@ fos_rest:
     body_listener: true
     format_listener: true
     view:
-        view_response_listener: 'force'
+        view_response_listener: force
+ 
+# Sensio Framework
+sensio_framework_extra:
+    view: { annotations: false }
+        
 
+    
