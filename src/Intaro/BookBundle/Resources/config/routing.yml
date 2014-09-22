@@ -1,4 +1,54 @@
-intaro_book:
-    resource: "@IntaroBookBundle/Controller/"
-    type: annotation
-    prefix: /
+# Получаем список всех книг
+book:
+    path: /book
+    methods: [GET]
+    defaults: { _controller: "IntaroBookBundle:Book:index" }
+    
+# Создаём новую книгу  
+book_create:
+    path: /book/create
+    methods: [POST]
+    defaults: { _controller: "IntaroBookBundle:Book:create" }
+    
+# Показываем форму для создания книги  
+book_new:
+    path: /book/new
+    methods: [GET]
+    defaults: { _controller: "IntaroBookBundle:Book:new" }
+    
+# Показываем книгу  
+book_show:
+    path: /book/{id}/show
+    methods: [GET]
+    defaults: { _controller: "IntaroBookBundle:Book:show" }
+    
+# Редактируем книгу  
+book_edit:
+    path: /book/{id}/edit
+    methods: [GET]
+    defaults: { _controller: "IntaroBookBundle:Book:edit" }
+    
+# Редактируем книгу  
+book_update:
+    path: /book/{id}/update
+    methods: [POST]
+    defaults: { _controller: "IntaroBookBundle:Book:update" }
+    
+# Удаляем книгу  
+book_delete:
+    path: /book/{id}/delete
+    methods: [GET]
+    defaults: { _controller: "IntaroBookBundle:Book:delete" }
+    
+# Скачиваем книгу  
+book_download:
+    path: /book/{id}/download
+    methods: [GET]
+    defaults: { _controller: "IntaroBookBundle:Book:download" }
+
+    
+     
+     
+
+
+    

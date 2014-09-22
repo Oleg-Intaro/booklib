@@ -4,8 +4,6 @@ namespace Intaro\BookBundle\Controller;
 
 use Intaro\BookBundle\Entity\Book;
 use Intaro\BookBundle\Form\BookType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,18 +12,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
- * Book controller.
- *
- * @Route("/book")
+ * Контроллер книг.
  */
 class BookController extends Controller
 {
 
     /**
-     * Lists all Book entities.
+     * Получаем список всех книг.
      *
-     * @Route("/", name="book")
-     * @Method("GET")
      * @Template()
      */
     public function indexAction()
@@ -44,8 +38,6 @@ class BookController extends Controller
      * 
      * @param Request $request
      *
-     * @Route("/", name="book_create")
-     * @Method("POST")
      * @Template("IntaroBookBundle:Book:new.html.twig")
      */
     public function createAction(Request $request)
@@ -61,7 +53,10 @@ class BookController extends Controller
             $em->flush();
             $this->clearCache();
 
-            return $this->redirect($this->generateUrl('book_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl(
+                'book_show',
+                array('id' => $entity->getId()
+            )));
         }
 
         return array(
@@ -94,8 +89,6 @@ class BookController extends Controller
     /**
      * Displays a form to create a new Book entity.
      *
-     * @Route("/new", name="book_new")
-     * @Method("GET")
      * @Template()
      * @Security("has_role('ROLE_USER')")
      */
@@ -116,8 +109,6 @@ class BookController extends Controller
      * 
      * @param int $id
      *
-     * @Route("/{id}", name="book_show")
-     * @Method("GET")
      * @Template()
      * @Security("has_role('ROLE_USER')")
      */
@@ -144,8 +135,6 @@ class BookController extends Controller
      * 
      * @param int $id
      *
-     * @Route("/{id}/edit", name="book_edit")
-     * @Method("GET")
      * @Template()
      * @Security("has_role('ROLE_USER')")
      */
@@ -179,8 +168,11 @@ class BookController extends Controller
     private function createEditForm(Book $entity)
     {
         $form = $this->createForm(new BookType(), $entity, array(
-            'action' => $this->generateUrl('book_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'action' => $this->generateUrl(
+                'book_update',
+                array('id' => $entity->getId()
+            )),
+            'method' => 'POST',
         ));
 
         $form->add('submit', 'submit', array('label' => 'Обновить'));
@@ -193,8 +185,6 @@ class BookController extends Controller
      * @param Request $request
      * @param int     $id
      * 
-     * @Route("/{id}", name="book_update")
-     * @Method("PUT")
      * @Template("IntaroBookBundle:Book:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
@@ -215,7 +205,10 @@ class BookController extends Controller
             $em->flush();
             $this->clearCache();
 
-            return $this->redirect($this->generateUrl('book_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl(
+                'book_edit',
+                array('id' => $id)
+            ));
         }
 
         return array(
@@ -229,9 +222,6 @@ class BookController extends Controller
      *
      * @param Request $request
      * @param int     $id
-     * 
-     * @Route("/{id}", name="book_delete")
-     * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -265,7 +255,7 @@ class BookController extends Controller
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('book_delete', array('id' => $id)))
-            ->setMethod('DELETE')
+            ->setMethod('GET')
             ->add('submit', 'submit', array('label' => 'Удалить'))
             ->getForm();
     }
@@ -274,9 +264,6 @@ class BookController extends Controller
      * Загрузка файла
      * 
      * @param int $id
-     * 
-     * @Route("/download/{id}", name="book_download")
-     * @Method("GET")
      * 
      * @return BinaryFileResponse
      */
