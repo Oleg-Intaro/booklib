@@ -34,7 +34,11 @@
                     Редактировать
                 </a>
             </li>
-            <li>{{ form(delete_form) }}</li>
+            <li>
+                {{ form_start(delete_form) }}
+                    {{ form_row(delete_form.submit, { 'label': 'Удалить' }) }}
+                {{ form_end(delete_form) }}
+            </li>
         </ul>
     </div><!--#page-->
 {% endblock %}

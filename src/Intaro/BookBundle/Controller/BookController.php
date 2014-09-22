@@ -81,7 +81,7 @@ class BookController extends Controller
         ));
         $form->add('file');
         $form->add('coverFile');
-        $form->add('submit', 'submit', array('label' => 'Добавить'));
+        $form->add('submit', 'submit');
 
         return $form;
     }
@@ -175,7 +175,7 @@ class BookController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Обновить'));
+        $form->add('submit', 'submit');
 
         return $form;
     }
@@ -256,7 +256,7 @@ class BookController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('book_delete', array('id' => $id)))
             ->setMethod('GET')
-            ->add('submit', 'submit', array('label' => 'Удалить'))
+            ->add('submit', 'submit')
             ->getForm();
     }
 
